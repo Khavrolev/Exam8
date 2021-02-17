@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
 
-namespace Exercise1
+namespace Exercise3
 {
     class Program
     {
-        private const int minutes = 30; //количество минут разницы, на которое нужно проверять в условии
+        private const int minutes = 1; //количество минут разницы, на которое нужно проверять в условии
         static void Main(string[] args)
         {
-            string path = "E:\\Хавролев\\Skillfactory\\Обучение\\Модуль 8\\Тест";
+            string path = "E:\\Хавролев\\Skillfactory\\Обучение\\Модуль 8\\Тест — копия (4) — копия";
             HalfHourErase(path);
 
             Console.ReadKey();
@@ -31,8 +31,24 @@ namespace Exercise1
                 {
                     Console.WriteLine("Папки с путём \"{0}\" не существует", root.FullName);
                 }
-                else if (HalfHourEraseFolder(root, true) == 0)
-                    Console.WriteLine("Нет ни одной папки и файла, доступ к которой осуществлялся более получаса назад");
+                else
+                {
+                    long sizeBefore = GetDirSizeFolder(root);
+                    Console.WriteLine("Исходный размер папки - {0} байт", sizeBefore);
+                    Console.WriteLine();
+
+                    int deleted = HalfHourEraseFolder(root, true);
+                    if (deleted == 0)
+                        Console.WriteLine("Нет ни одной папки и файла, доступ к которой осуществлялся более получаса назад");
+
+                    long sizeAfter = GetDirSizeFolder(root);
+                    Console.WriteLine();
+                    Console.WriteLine("Освобождено - {0} байт", sizeBefore - sizeAfter);
+                    Console.WriteLine();
+                    Console.WriteLine("Удалено папок и файлов - {0} шт", deleted);
+                    Console.WriteLine();
+                    Console.WriteLine("Текущий размер папки - {0} байт", sizeAfter);
+                }
             }
             catch (Exception e)
             {
@@ -97,6 +113,32 @@ namespace Exercise1
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Рекурсивный подсчёт памяти
+        /// </summary>
+        /// <param name="root">Объект DirectoryInfo</param>
+        /// <returns></returns>
+        static long GetDirSizeFolder(DirectoryInfo root)
+        {
+            long size = 0;
+
+            FileInfo[] files = root.GetFiles();
+
+            foreach (FileInfo file in files)
+            {
+                size += file.Length;
+            }
+
+            DirectoryInfo[] folders = root.GetDirectories();
+
+            foreach (DirectoryInfo folder in folders)
+            {
+                size += GetDirSizeFolder(folder);
+            }
+
+            return size;
         }
     }
 }
