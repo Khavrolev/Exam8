@@ -5,10 +5,10 @@ namespace Exercise3
 {
     class Program
     {
-        private const int minutes = 1; //количество минут разницы, на которое нужно проверять в условии
+        private const int minutes = 30; //количество минут разницы, на которое нужно проверять в условии
         static void Main(string[] args)
         {
-            string path = "E:\\Хавролев\\Skillfactory\\Обучение\\Модуль 8\\Тест — копия (4) — копия";
+            string path = "E:\\Хавролев\\Skillfactory\\Обучение\\Модуль 8\\Тест";
             HalfHourErase(path);
 
             Console.ReadKey();
